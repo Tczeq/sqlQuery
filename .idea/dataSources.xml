@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ksiegarnia@localhost" uuid="40409343-318c-47d6-ab27-2a17d26d259f">
+    <data-source source="LOCAL" name="samochody@localhost" uuid="9594ceaa-968f-4d23-ba99-bdb172db162c">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/samochody</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="ksiegarnia@localhost" uuid="e0f910c1-b829-4f46-8f37-e84458dbf955">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/ksiegarnia</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="samochody@localhost" uuid="9594ceaa-968f-4d23-ba99-bdb172db162c">
+    <data-source source="LOCAL" name="pociagi@localhost" uuid="cf89c2d0-3175-47c3-9504-902a0aaa3057">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/samochody</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/pociagi</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

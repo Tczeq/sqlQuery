@@ -1,4 +1,4 @@
-package pracaDomowa.connection;
+package pracaDomowaZapisDoBazyDanych.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

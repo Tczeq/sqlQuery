@@ -1,7 +1,7 @@
-package pracaDomowa;
+package pracaDomowaZapisDoBazyDanych;
 
-import pracaDomowa.model.Car;
-import pracaDomowa.service.SQLService;
+import pracaDomowaZapisDoBazyDanych.model.Car;
+import pracaDomowaZapisDoBazyDanych.service.SQLService;
 
 import java.sql.SQLException;
 
