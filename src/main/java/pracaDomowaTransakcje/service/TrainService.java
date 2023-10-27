@@ -28,7 +28,7 @@ public class TrainService {
                 System.out.println("Usunieto: " + deletedRows);
                 if (deletedRows == 0) {
                     connection.rollback();
-                    System.out.println("Operacja DELETE nie powiodla sie. Wykonuje rollback");
+                    System.out.println("Operacja DELETE nie powiodla sie. Rollback");
                     return;
                 }
             } finally {
@@ -63,7 +63,7 @@ public class TrainService {
                 System.out.println("Zaktualizowano: " + updatedRows);
                 if (updatedRows == 0) {
                     connection.rollback();
-                    System.out.println("Operacja UPDATE nie powiodla sie. Wykonuje rollback");
+                    System.out.println("Operacja UPDATE nie powiodla sie. Rollback");
                     return;
                 }
             } finally {
