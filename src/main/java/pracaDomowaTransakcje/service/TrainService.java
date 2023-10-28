@@ -1,5 +1,8 @@
 package pracaDomowaTransakcje.service;
 
+import pracaDomowaTransakcje.exception.RollBackException;
+import pracaDomowaTransakcje.model.Train;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,67 +15,61 @@ public class TrainService {
         this.connection = connection;
     }
 
-    public void transactionTrain() throws SQLException {
+    public void delete(String name) throws SQLException {
+
+        try (PreparedStatement prepStm1 = connection.prepareStatement("delete from train where name = ?")) {
+            prepStm1.setString(1, name);
+
+            int deletedRows = prepStm1.executeUpdate();
+            System.out.println("Usunieto: " + deletedRows);
+            if (deletedRows == 0) {
+                throw new RollBackException("Operacja DELETE nie powiodla sie. Rollback");
+            }
+        }
+    }
+
+    public void insert(Train train) throws SQLException {
+        try (PreparedStatement prepStm2 = connection.prepareStatement("insert into train (name, length, isWars, seatNumber) values (?, ?, ?, ?);")) {
+            prepStm2.setString(1, train.getName());
+            prepStm2.setDouble(2, train.getLength());
+            prepStm2.setBoolean(3, train.isWars());
+            prepStm2.setInt(4, train.getSeatNumber());
+
+            int insertedRows = prepStm2.executeUpdate();
+            System.out.println("Dodano: " + insertedRows);
+        }
+    }
+
+    public void update(String actuallName, String newName) throws SQLException {
+        try (PreparedStatement prepStm3 = connection.prepareStatement("UPDATE train SET name = ? WHERE name = ?")){
+
+            // Nowa imie
+            prepStm3.setString(1, newName);
+            //Istniejace imie
+            prepStm3.setString(2, actuallName);
+
+            int updatedRows = prepStm3.executeUpdate();
+            System.out.println("Zaktualizowano: " + updatedRows);
+            if (updatedRows == 0) {
+                throw new RollBackException("Operacja DELETE nie powiodla sie. Rollback");
+            }
+        }
+    }
+
+    public void transactionTrain(String deleteName, Train insertTrain, String oldName, String newName) throws SQLException {
 
         try {
             connection.setAutoCommit(false);
 
-            // DELETE
-            PreparedStatement prepStm1 = null;
+            delete(deleteName);
 
-            try {
-                prepStm1 = connection.prepareStatement("delete from train where name = ?");
-                prepStm1.setString(1, "Martyna");
+            insert(insertTrain);
 
-                int deletedRows = prepStm1.executeUpdate();
-                System.out.println("Usunieto: " + deletedRows);
-                if (deletedRows == 0) {
-                    connection.rollback();
-                    System.out.println("Operacja DELETE nie powiodla sie. Rollback");
-                    return;
-                }
-            } finally {
-                if (prepStm1 != null) prepStm1.close();
-            }
-
-            // INSERT
-            PreparedStatement prepStm2 = null;
-            try {
-                prepStm2 = connection.prepareStatement("insert into train (name, length, isWars, seatNumber) values (?, ?, ?, ?);");
-                prepStm2.setString(1, "Janusz");
-                prepStm2.setDouble(2, 213.02);
-                prepStm2.setBoolean(3, true);
-                prepStm2.setInt(4, 2132);
-
-                int insertedRows = prepStm2.executeUpdate();
-                System.out.println("Dodano: " + insertedRows);
-            } finally {
-                if (prepStm2 != null) prepStm2.close();
-            }
-
-            // UPDATE
-            PreparedStatement prepStm3 = null;
-            try {
-                prepStm3 = connection.prepareStatement("UPDATE train SET name = ? WHERE name = ?");
-                // Nowa imie
-                prepStm3.setString(1, "Justyna");
-                //Istniejace imie
-                prepStm3.setString(2, "Justa");
-
-                int updatedRows = prepStm3.executeUpdate();
-                System.out.println("Zaktualizowano: " + updatedRows);
-                if (updatedRows == 0) {
-                    connection.rollback();
-                    System.out.println("Operacja UPDATE nie powiodla sie. Rollback");
-                    return;
-                }
-            } finally {
-                if (prepStm3 != null) prepStm3.close();
-            }
+            update(oldName, newName);
 
             connection.commit();
 
-        } catch (SQLException e) {
+        } catch (RollBackException e) {
             System.out.println("ROLLBACK!!!!!");
             connection.rollback();
             e.printStackTrace();

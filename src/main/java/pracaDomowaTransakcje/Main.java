@@ -1,6 +1,7 @@
 package pracaDomowaTransakcje;
 
 import pracaDomowaTransakcje.connection.Config;
+import pracaDomowaTransakcje.model.Train;
 import pracaDomowaTransakcje.service.TrainService;
 
 import java.sql.Connection;
@@ -12,7 +13,17 @@ public class Main {
 
         try (Connection connection = config.getConnection()) {
             TrainService service = new TrainService(connection);
-            service.transactionTrain();
+
+            //DELETE
+            String deleteName = "Martyna";
+            //INSERT
+            Train newTrain = new Train("Janusz", 213.02, true, 2132);
+            //UPDATE
+            String oldName = "Justa";
+            String newName = "Justyna";
+
+
+            service.transactionTrain(deleteName, newTrain, oldName, newName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
