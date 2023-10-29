@@ -1,6 +1,7 @@
 package pracaDomowaTransakcje.employeeManagement.service;
 
 import pracaDomowaTransakcje.employeeManagement.exception.IncorrectAmountException;
+import pracaDomowaTransakcje.employeeManagement.exception.IncorrectIdException;
 import pracaDomowaTransakcje.employeeManagement.exception.IncorrectJobPositionException;
 import pracaDomowaTransakcje.employeeManagement.exception.NotFindEmployeeException;
 import pracaDomowaTransakcje.employeeManagement.model.Employee;
