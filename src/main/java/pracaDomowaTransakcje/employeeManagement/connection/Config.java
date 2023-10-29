@@ -1,4 +1,4 @@
-package pracaDomowaTransakcje.connection;
+package pracaDomowaTransakcje.employeeManagement.connection;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -11,7 +11,7 @@ public class Config {
 
     public Config() {
         dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/pociagi?useSSL=false&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/pracownik?useSSL=false&serverTimezone=UTC");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
     }

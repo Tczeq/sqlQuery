@@ -1,4 +1,4 @@
-package pracaDomowaTransakcje.model;
+package pracaDomowaTransakcje.train.model;
 
 import lombok.*;
 

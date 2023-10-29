@@ -1,4 +1,4 @@
-package pracaDomowaTransakcje.exception;
+package pracaDomowaTransakcje.train.exception;
 
 public class RollBackException extends RuntimeException {
     public RollBackException(String message) {

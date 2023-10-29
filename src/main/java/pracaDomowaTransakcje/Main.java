@@ -1,8 +1,8 @@
 package pracaDomowaTransakcje;
 
-import pracaDomowaTransakcje.connection.Config;
-import pracaDomowaTransakcje.model.Train;
-import pracaDomowaTransakcje.service.TrainService;
+import pracaDomowaTransakcje.train.connection.Config;
+import pracaDomowaTransakcje.train.model.Train;
+import pracaDomowaTransakcje.train.service.TrainService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,13 +15,14 @@ public class Main {
             TrainService service = new TrainService(connection);
 
             //DELETE
-            String deleteName = "Martyna";
+            String deleteName = "Karolina";
             //INSERT
             Train newTrain = new Train("Janusz", 213.02, true, 2132);
             //UPDATE
             String oldName = "Justa";
             String newName = "Justyna";
 
+            service.delete(deleteName);
 
             service.transactionTrain(deleteName, newTrain, oldName, newName);
         } catch (SQLException e) {

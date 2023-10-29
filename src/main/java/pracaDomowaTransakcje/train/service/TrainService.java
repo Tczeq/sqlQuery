@@ -1,7 +1,7 @@
-package pracaDomowaTransakcje.service;
+package pracaDomowaTransakcje.train.service;
 
-import pracaDomowaTransakcje.exception.RollBackException;
-import pracaDomowaTransakcje.model.Train;
+import pracaDomowaTransakcje.train.exception.RollBackException;
+import pracaDomowaTransakcje.train.model.Train;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,7 +51,7 @@ public class TrainService {
             int updatedRows = prepStm3.executeUpdate();
             System.out.println("Zaktualizowano: " + updatedRows);
             if (updatedRows == 0) {
-                throw new RollBackException("Operacja DELETE nie powiodla sie. Rollback");
+                throw new RollBackException("Operacja UPDATE nie powiodla sie. Rollback");
             }
         }
     }
