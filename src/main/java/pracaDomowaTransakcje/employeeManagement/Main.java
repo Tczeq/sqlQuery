@@ -37,8 +37,10 @@ public class Main {
 //            service.findEmployee("Janusz","Nowowski");
 
 
-            service.hireEmployee(p1);
+//            service.hireEmployee(p1);
 //            service.hireEmployee(p2);
+
+            service.fireEmployee(10);
 
         } catch (SQLException e) {
             e.printStackTrace();

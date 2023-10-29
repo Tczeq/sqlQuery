@@ -1,5 +1,7 @@
 package pracaDomowaTransakcje.employeeManagement.service;
 
+import pracaDomowaTransakcje.employeeManagement.exception.IncorrectAmountException;
+import pracaDomowaTransakcje.employeeManagement.exception.IncorrectJobPositionException;
 import pracaDomowaTransakcje.employeeManagement.exception.NotFindEmployeeException;
 import pracaDomowaTransakcje.employeeManagement.model.Employee;
 import pracaDomowaTransakcje.employeeManagement.model.JobPosition;
@@ -18,8 +20,6 @@ public class EmployeeService {
     }
 
     public void hireEmployee(Employee employee) throws SQLException {
-
-
         try (PreparedStatement prepStm = connection.prepareStatement("select * from Emp where name = ? and surname = ?")) {
             prepStm.setString(1, employee.getName());
             prepStm.setString(2, employee.getSurname());
@@ -33,7 +33,7 @@ public class EmployeeService {
                     updateStatement.setInt(2, employeeId);
 
                     int updatedRows = updateStatement.executeUpdate();
-                    System.out.println("Zatrudniono ponownie pracownika: " + updatedRows);
+                    System.out.println("Employee rehired: " + updatedRows);
                 }
             } else {
                 insertNewEmployee(employee);
@@ -43,69 +43,106 @@ public class EmployeeService {
     }
 
     public void insertNewEmployee(Employee employee) throws SQLException {
-        try (PreparedStatement prepStm2 = connection.prepareStatement("insert into Emp (name, surname, jobPosition, salary, isFired) values (?, ?, ?, ?, ?);")) {
-            prepStm2.setString(1, employee.getName());
-            prepStm2.setString(2, employee.getSurname());
-            prepStm2.setString(3, employee.getPosition().name());
-            prepStm2.setDouble(4, employee.getSalary());
-            prepStm2.setBoolean(5, employee.isFired());
+        try (PreparedStatement prepStm = connection.prepareStatement("insert into Emp (name, surname, jobPosition, salary, isFired) values (?, ?, ?, ?, ?)")) {
+            prepStm.setString(1, employee.getName());
+            prepStm.setString(2, employee.getSurname());
+            prepStm.setString(3, employee.getPosition().name());
+            prepStm.setDouble(4, employee.getSalary());
+            prepStm.setBoolean(5, employee.isFired());
 
-            int insertedRows = prepStm2.executeUpdate();
-            System.out.println("Dodano nowego pracownika: " + insertedRows);
+            int insertedRows = prepStm.executeUpdate();
+            System.out.println("New employee hired: " + insertedRows);
         }
     }
+
     public void fireEmployee(int employeeId) throws SQLException {
+        if (employeeId < 0) {
+            throw new IncorrectIdException("Incorrect value");
+        }
         try (PreparedStatement prepStm = connection.prepareStatement("update Emp set isFired = ? where employeeId = ?")) {
             prepStm.setBoolean(1, true);
             prepStm.setInt(2, employeeId);
 
             int updatedRows = prepStm.executeUpdate();
-            System.out.println("Zwolniono pracownika: " + updatedRows);
+            if(updatedRows > 0) {
+                System.out.println("Employee fired: " + updatedRows);
+            } else {
+                System.out.println("Wrong ID");
+            }
         }
 
     }
 
     public void increaseSalary(int employeeId, double salaryAmount) throws SQLException {
+        if (employeeId < 0) {
+            throw new IncorrectIdException("Incorrect value");
+        }
+        if (salaryAmount < 0) {
+            throw new IncorrectAmountException("Incorrect value of amount");
+        }
 
         try (PreparedStatement prepStm = connection.prepareStatement("UPDATE Emp SET salary = (salary + ?) WHERE employeeId = ?")) {
             prepStm.setDouble(1, salaryAmount);
             prepStm.setInt(2, employeeId);
 
             int updatedRows = prepStm.executeUpdate();
-            System.out.println("Podwyzszono pensje: " + updatedRows);
+
+            if(updatedRows > 0) {
+                System.out.println("Salary increased: " + updatedRows);
+            } else {
+                System.out.println("Wrong ID");
+            }
         }
 
     }
 
-    public void decreaseSalary(int employeeId, double salaryAmount) throws SQLException {
+    public void reduceSalary(int employeeId, double salaryAmount) throws SQLException {
+        if (employeeId < 0) {
+            throw new IncorrectIdException("Incorrect value");
+        }
+        if (salaryAmount < 0) {
+            throw new IncorrectAmountException("Incorrect value of amount");
+        }
 
         try (PreparedStatement prepStm = connection.prepareStatement("UPDATE Emp SET salary = (salary - ?) WHERE employeeId = ?")) {
             prepStm.setDouble(1, salaryAmount);
             prepStm.setInt(2, employeeId);
 
             int updatedRows = prepStm.executeUpdate();
-            System.out.println("Obnizono pensje: " + updatedRows);
+            if(updatedRows > 0) {
+                System.out.println("Salaries reduced: " + updatedRows);
+            } else {
+                System.out.println("Wrong ID");
+            }
         }
 
     }
 
 
-
     public void promotedPosition(int employeeId, JobPosition newPosition) throws SQLException {
+        if (employeeId < 0) {
+            throw new IncorrectIdException("Incorrect value");
+        }
 
-
-
+        if (newPosition == null) {
+            throw new IncorrectJobPositionException("Wrong name of job Position");
+        }
 
         try (PreparedStatement prepStm = connection.prepareStatement("UPDATE Emp SET jobPosition = ? WHERE employeeId = ?")) {
             prepStm.setString(1, newPosition.name());
             prepStm.setInt(2, employeeId);
 
             int updatedRows = prepStm.executeUpdate();
-            System.out.println("Awasowano pracownika: " + updatedRows);
+
+
+            if(updatedRows > 0) {
+                System.out.println("Employee promoted: " + updatedRows);
+            } else {
+                System.out.println("Wrong ID");
+            }
         }
 
     }
-
 
 
     public void findEmployee(String name, String surname) throws SQLException {
@@ -124,9 +161,9 @@ public class EmployeeService {
                 double salary = resultSet.getDouble("salary");
                 boolean isFired = resultSet.getBoolean("isFired");
 
-                System.out.println("Znaleziono pracownika: " + foundName + " " + foundSurname + " id:" + employeeId + ", stanowisko: " + jobPosition + ", wynagrodzenie: " + salary + ", jest zwolniony? " + isFired);
+                System.out.println("Employee found: " + foundName + " " + foundSurname + " id:" + employeeId + ", position: " + jobPosition + ", salary: " + salary + ", is fired? " + isFired);
             } else {
-                throw new NotFindEmployeeException("Nie znaleziono pracownika, albo wpisano zle dane");
+                throw new NotFindEmployeeException("Employee not found, or wrong data entered");
             }
 
         }
