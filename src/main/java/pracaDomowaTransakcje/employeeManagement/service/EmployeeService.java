@@ -158,16 +158,21 @@ public class EmployeeService {
                 int employeeId = resultSet.getInt("employeeId");
                 String foundName = resultSet.getString("name");
                 String foundSurname = resultSet.getString("surname");
-                String jobPosition = resultSet.getString("jobPosition");
+                String jobPositionStr = resultSet.getString("jobPosition");
                 double salary = resultSet.getDouble("salary");
                 boolean isFired = resultSet.getBoolean("isFired");
 
-                System.out.println("Employee found: " + foundName + " " + foundSurname + " id:" + employeeId + ", position: " + jobPosition + ", salary: " + salary + ", is fired? " + isFired);
+                JobPosition jobPosition = JobPosition.valueOf(jobPositionStr);
+
+                Employee foundEmployee = new Employee(foundName, foundSurname, jobPosition, salary, isFired);;
+
+                System.out.println("Employee found: " + foundEmployee);
             } else {
                 throw new NotFindEmployeeException("Employee not found, or wrong data entered");
             }
 
         }
+
 
 
     }
